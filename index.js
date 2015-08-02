@@ -1,8 +1,11 @@
 var apiURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
 
-var React = require('react');
 var views = require('./views');
+var React = require('react');
+var Promise = require('bluebird');
+var fetch = require('node-fetch');
+fetch.Promise = Promise;
 
 var fetchJSON = function(username, id) {
   var url = apiURL + '/' + username;
