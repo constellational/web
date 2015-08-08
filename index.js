@@ -22,5 +22,5 @@ var generateHTML = function(json) {
 
 exports.handler = function(event, context) {
   console.log(event);
-  fetchJSON(event.username, event.id).then(context.succeed).catch(context.fail);
+  fetchJSON(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
 };
