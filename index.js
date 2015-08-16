@@ -7,20 +7,41 @@ var Promise = require('bluebird');
 var fetch = require('node-fetch');
 fetch.Promise = Promise;
 
-var fetchJSON = function(username, id) {
+function fetchArticleList(username) {
   var url = apiURL + '/' + username;
-  if (id) url += '/' + id;
   return fetch(url).then(function(res) {
     return res.json();
   });
-};
+}
 
-var generateHTML = function(json) {
-  var reactString = React.renderToString(React.createElement(views.Blog, json));
-  return "<html><body>" + reactString + "</body></html>";
+function fetchArticle(username, id) {
+  var url = apiURL + '/' + username + '/' + id;
+  return fetch(url).then(function(res) {
+    return res.json();
+  });
+}
+
+function fetchData(username, id) {
+  var user = {};
+  return fetchArticleList(username).then(function(u) {
+    user = u;
+    var promiseArr = user.articles.map(function(id) {
+      return fetchArticle(username, id);
+    });
+    return Promise.all(promiseArr);
+  }).then(function(articles) {
+    user.articles = articles;
+    if (id) {};
+    return user;
+  });
+}
+
+var generateHTML = function(data) {
+  var reactString = React.renderToString(React.createElement(views.Articles, data));
+  return "<html><body>" + reactString + "</body><script src='/main.html'></script></html>";
 };
 
 exports.handler = function(event, context) {
   console.log(event);
-  fetchJSON(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
+  fetchData(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
 };
