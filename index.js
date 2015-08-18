@@ -10,7 +10,7 @@ fetch.Promise = Promise;
 
 var generateHTML = function(data) {
   var reactString = React.renderToString(React.createElement(views.Articles, data));
-  return "<html><body>" + reactString + "</body><script src='/main.html'></script></html>";
+  return "<html><body>" + reactString + "</body><script src='/main.js'></script></html>";
 };
 
 exports.handler = function(event, context) {
