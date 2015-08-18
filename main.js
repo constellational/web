@@ -3,21 +3,18 @@ var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
 
 var api = require('./api');
 var views = require('./views');
-var user = require('./user');
 var React = require('react');
 var Promise = require('bluebird');
 
-var load = function(username, id) {
+var splitPathname = window.location.pathname.split('/')[0];
+var username = splitPathname[0];
+var articleID = null; 
+if (len(splitPathname) === 2) articleID = splitPathname[1];
+
+function load(username, id) {
   return api(username, id).then(function(data) {
     React.render(React.createElement(views.Articles, data), document.body);
   });
 };
 
-exports.handler = function(event, context) {
-  console.log(event);
-  load(event.username, event.id).then(() => {
-  
-  }).catch(err => {
-  
-  });
-};
+load(username, articleID);
