@@ -8,7 +8,7 @@ var React = require('react');
 var Promise = require('bluebird');
 
 var load = function(username, id) {
-  return api(username, id).then(function(data) => {
+  return api(username, id).then(function(data) {
     React.render(React.createElement(views.Articles, data), document.body);
   });
 };
