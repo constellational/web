@@ -4,13 +4,11 @@ var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
 var views = require('./views');
 var api = require('./api');
 var React = require('react');
-var Promise = require('bluebird');
-var fetch = require('node-fetch');
-fetch.Promise = Promise;
 
 var generateHTML = function(data) {
+  var scriptSrc = staticURL + '/main.js';
   var reactString = React.renderToString(React.createElement(views.Articles, data));
-  return "<html><body>" + reactString + "</body><script src='/main.js'></script></html>";
+  return "<html><body>" + reactString + "</body><script src='" + scriptSrc + "'></script></html>";
 };
 
 exports.handler = function(event, context) {
