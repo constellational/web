@@ -6,9 +6,10 @@ var api = require('./api');
 var React = require('react');
 
 var generateHTML = function(data) {
+  var cssSrc = staticURL + '/style.css';
   var scriptSrc = staticURL + '/main.js';
   var reactString = React.renderToString(React.createElement(views.Articles, data));
-  return "<html><body>" + reactString + "</body><script src='" + scriptSrc + "'></script></html>";
+  return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><meta name='viewport' content='width=device-width, initial-scale=1' /><link rel='stylesheet' type='text/css' href='" + cssSrc + "'><body>" + reactString + "</body><script src='" + scriptSrc + "'></script></html>";
 };
 
 exports.handler = function(event, context) {
