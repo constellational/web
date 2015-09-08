@@ -7,8 +7,8 @@ var React = require('react');
 var Promise = require('bluebird');
 var fetch = require('node-fetch');
 fetch.Promise = Promise;
-var api = require('./api');
-var api = new api(API_URL, fetch);
+var API = require('./api');
+var api = new API(API_URL, fetch);
 
 function generateHTML(data) {
   let cssSrc = staticURL + '/style.css';
@@ -19,5 +19,5 @@ function generateHTML(data) {
 
 exports.handler = function(event, context) {
   console.log(event);
-  api(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
+  api.fetchData(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
 };
