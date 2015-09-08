@@ -18,9 +18,7 @@ class API {
   }
 
   function fetchData(username, id) {
-    var user = {};
-    return fetchArticleList(username).then((u) {
-      user = u;
+    return fetchArticleList(username).then((user) => {
       if (id) {
         let i = user.articles.indexOf(id);
         if (i != -1) {
@@ -29,12 +27,12 @@ class API {
         }
       }
       var promiseArr = user.articles.map(id => fetchArticle(username, id));
-      return Promise.all(promiseArr);
-    }).then(function(articles) {
-      user.articles = articles;
-      return user;
+      return Promise.all(promiseArr).then((articles) => {
+        user.articles = articles;
+        return user;
+      });
     });
   }
 }
 
-exports = fetchData;
+exports = API;
