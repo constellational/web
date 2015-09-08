@@ -18,7 +18,7 @@ class API {
   }
 
   function fetchData(username, id) {
-    return fetchArticleList(username).then((user) => {
+    return this.fetchArticleList(username).then((user) => {
       if (id) {
         let i = user.articles.indexOf(id);
         if (i != -1) {
@@ -26,7 +26,7 @@ class API {
           user.articles.unshift(id);
         }
       }
-      var promiseArr = user.articles.map(id => fetchArticle(username, id));
+      var promiseArr = user.articles.map(id => this.fetchArticle(username, id));
       return Promise.all(promiseArr).then((articles) => {
         user.articles = articles;
         return user;
