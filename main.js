@@ -1,20 +1,19 @@
-var apiURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
-var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
+var API_URL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 
-var api = require('./api');
-var views = require('./views');
+var API = require('./lambda/api');
+var api = new API(API_URL);
+var views = require('./lambda/views');
 var React = require('react');
-var Promise = require('bluebird');
 
-var splitPathname = window.location.pathname.split('/')[0];
-var username = splitPathname[0];
-var articleID = null; 
-if (len(splitPathname) === 2) articleID = splitPathname[1];
+var splitPathname = window.location.pathname.split('/');
+let username = splitPathname.shift();
+let articleID = splitPathname.shift(); 
 
 function load(username, id) {
-  return api(username, id).then(function(data) {
-    React.render(React.createElement(views.Articles, data), document.body);
+  return api(username, id).then((data) => {
+    let mountNode = document.getElementById("react-mount");
+    React.render(React.createElement(views.Articles, data), mountNode);
   });
-};
+}
 
 load(username, articleID);
