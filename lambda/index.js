@@ -11,6 +11,7 @@ var api = require('./api');
 var api = new api(API_URL, fetch);
 
 function generateHTML(data) {
+  console.log("generating html");
   let cssSrc = staticURL + '/style.css';
   let scriptSrc = staticURL + '/main.js';
   let reactString = React.renderToString(React.createElement(views.Articles, data));
