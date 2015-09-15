@@ -22,8 +22,7 @@ class API {
   fetchData(username, id) {
     console.log("going to fetch data for " + username);
     var user = {};
-    return fetchArticleList(username).then((u) => {
-      user = u;
+    return this.fetchArticleList(username).then((user) => {
       if (id) {
         console.log("going to put " + id + " first");
         let i = user.articles.indexOf(id);
@@ -32,14 +31,14 @@ class API {
           user.articles.unshift(id);
         }
       }
-      var promiseArr = user.articles.map(id => fetchArticle(username, id));
-      return Promise.all(promiseArr);
-    }).then(function(articles) {
-      console.log("got articles for user " + username);
-      user.articles = articles;
-      return user;
+      var promiseArr = user.articles.map(id => this.fetchArticle(username, id));
+      return Promise.all(promiseArr).then((articles) => {
+        console.log("got articles for user " + username);
+        user.articles = articles;
+        return user;
+      });
     });
   }
 }
 
-exports = fetchData;
+exports = API;
