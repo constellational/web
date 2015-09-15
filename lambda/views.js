@@ -3,7 +3,7 @@ var moment = require('moment');
 
 var Article = React.createClass({
   render: function() {
-    var article = this.props.article;
+    var article = this.props.data;
     return <div className="article">
       <h2><a href={'/' + this.props.username + '/' + article.id}>{article.heading}</a></h2>
       <div>{article.data}</div>;
