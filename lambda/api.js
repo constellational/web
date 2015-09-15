@@ -21,7 +21,6 @@ class API {
 
   fetchData(username, id) {
     console.log("going to fetch data for " + username);
-    var user = {};
     return this.fetchArticleList(username).then((user) => {
       if (id) {
         console.log("going to put " + id + " first");
@@ -41,4 +40,4 @@ class API {
   }
 }
 
-exports = API;
+export default API;

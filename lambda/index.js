@@ -8,7 +8,7 @@ var Promise = require('bluebird');
 var fetch = require('node-fetch');
 fetch.Promise = Promise;
 var API = require('./api');
-var api = new API(API_URL, fetch);
+var api = new API(apiURL, fetch);
 
 function generateHTML(data) {
   console.log("generating html");
