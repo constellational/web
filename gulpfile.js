@@ -12,6 +12,5 @@ gulp.task('default', function() {
        transform: [ 'reactify' ]
      }))
      .pipe(uglify())
-     .on('error', gutil)
      .pipe(gulp.dest('./public/'));
 });

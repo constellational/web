@@ -1,6 +1,6 @@
 var API_URL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 require("babel/register");
-var API = require('./lambda/api');
+var API = require('./api');
 var api = new API(API_URL);
 var views = require('./lambda/views');
 var React = require('react');

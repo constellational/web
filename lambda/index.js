@@ -18,26 +18,41 @@ function getObj(bucket, key) {
   });
 }
 
+function getUser(username) {
+  var bucket = 'constellational-store';
+  return getObj(bucket, username).catch(function() {
+    return {};
+  });
+}
+
 function fetchData(username, id) {
   console.log("Going to fetch data");
   var bucket = 'constellational-store';
-  return getObj(bucket, username).then(function(user) {
+  return getUser(username).then(function(user) {
     console.log("Going to fetch articles");
-    if (id) {
-      console.log("going to put " + id + " first");
-      var i = user.articles.indexOf(id);
-      if (i != -1) {
-        user.articles.splice(i, 1);
-        user.articles.unshift(id);
+    var prefix = username + '/';
+    return s3.listObjectsAsync({Bucket: bucket, Prefix: prefix}).then(function(data) {
+      user.articles = data.Contents.map(function(o) {
+        return o.Key.substring(prefix.length);
+      });
+      user.articles.reverse();
+      if (id) {
+        console.log("going to put " + id + " first");
+        var i = user.articles.indexOf(id);
+        if (i != -1) {
+          user.articles.splice(i, 1);
+          user.articles.unshift(id);
+        }
       }
-    }
-    var promiseArr = user.articles.map(function(id) {
-      return getObj(bucket, username + '/' + id);
-    });
-    return Promise.all(promiseArr).then(function(articles) {
-      console.log("got articles for user " + username);
-      user.articles = articles;
-      return user;
+      var promiseArr = user.articles.map(function(id) {
+        console.log("going to get article " + id + " by username " + username);
+        return getObj(bucket, username + '/' + id);
+      });
+      return Promise.all(promiseArr).then(function(articles) {
+        console.log("got articles for user " + username);
+        user.articles = articles;
+        return user;
+      });
     });
   });
 }
