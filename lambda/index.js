@@ -5,10 +5,42 @@ require("babel/register");
 var views = require('./views');
 var React = require('react');
 var Promise = require('bluebird');
-var fetch = require('node-fetch');
-fetch.Promise = Promise;
-var API = require('./api');
-var api = new API(apiURL, fetch);
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+Promise.promisifyAll(Object.getPrototypeOf(s3));
+
+function getObj(bucket, key) {
+  console.log("Going to get " + key + " from " + bucket);
+  var params = {Bucket: bucket, Key: key};
+  return s3.getObjectAsync(params).then(function(data) {
+    var s = new Buffer(data.Body).toString();
+    return JSON.parse(s);
+  });
+}
+
+function fetchData(username, id) {
+  console.log("Going to fetch data");
+  var bucket = 'constellational-store';
+  return getObj(bucket, username).then(function(user) {
+    console.log("Going to fetch articles");
+    if (id) {
+      console.log("going to put " + id + " first");
+      var i = user.articles.indexOf(id);
+      if (i != -1) {
+        user.articles.splice(i, 1);
+        user.articles.unshift(id);
+      }
+    }
+    var promiseArr = user.articles.map(function(id) {
+      return getObj(bucket, username + '/' + id);
+    });
+    return Promise.all(promiseArr).then(function(articles) {
+      console.log("got articles for user " + username);
+      user.articles = articles;
+      return user;
+    });
+  });
+}
 
 function generateHTML(data) {
   console.log("generating html");
@@ -20,5 +52,5 @@ function generateHTML(data) {
 
 exports.handler = function(event, context) {
   console.log(event);
-  api.fetchData(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
+  fetchData(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
 };
