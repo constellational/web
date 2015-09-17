@@ -25,27 +25,20 @@ function fetchData(username, id) {
   console.log("Going to fetch articles");
   var prefix = username + '/';
   return s3.listObjectsAsync({Bucket: bucket, Prefix: prefix}).then(function(data) {
-    user.articles = data.Contents.map(function(o) {
-      return o.Key.substring(prefix.length);
-    });
+    user.articles = data.Contents.map(obj => obj.Key.substring(prefix.length));
     user.articles.reverse();
-    if (id) {
-      console.log("going to put " + id + " first");
-      var i = user.articles.indexOf(id);
-      if (i != -1) {
-        user.articles.splice(i, 1);
-        user.articles.unshift(id);
-      }
+    var i = -1;
+    if (id) i = user.articles.indexOf(id);
+    if (i >= 0) {
+      console.log("Placing " + id + " first in the article list");
+      user.articles.splice(i, 1);
+      user.articles.unshift(id);
     }
-    var promiseArr = user.articles.map(function(id) {
-      console.log("going to get article " + id + " by username " + username);
-      return getObj(bucket, username + '/' + id);
-    });
-    return Promise.all(promiseArr).then(function(articles) {
-      console.log("got articles for user " + username);
-      user.articles = articles;
-      return user;
-    });
+    return user.articles.map(id => getObj(bucket, username + '/' + id));
+  }).then(Promise.all).then(function(articles) {
+    console.log("got articles for user " + username);
+    user.articles = articles;
+    return user;
   });
 }
 
