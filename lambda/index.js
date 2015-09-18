@@ -22,10 +22,12 @@ function fetchData(username, id) {
   console.log("Going to fetch data");
   var bucket = 'constellational-store';
   var user = {};
-  console.log("Going to fetch articles");
+  console.log("Going to fetch article ids");
   var prefix = username + '/';
   return s3.listObjectsAsync({Bucket: bucket, Prefix: prefix}).then(function(data) {
-    user.articles = data.Contents.map(obj => obj.Key.substring(prefix.length));
+    user.articles = data.Contents.map(function (obj) {
+      return obj.Key.substring(prefix.length);
+    });
     user.articles.reverse();
     var i = -1;
     if (id) i = user.articles.indexOf(id);
@@ -34,8 +36,12 @@ function fetchData(username, id) {
       user.articles.splice(i, 1);
       user.articles.unshift(id);
     }
-    return user.articles.map(id => getObj(bucket, username + '/' + id));
-  }).then(Promise.all).then(function(articles) {
+    console.log("Going to fetch articles");
+    var promiseArr = user.articles.map(function(id) {
+      return getObj(bucket, username + '/' + id);
+    });
+    return Promise.all(promiseArr);
+  }).then(function(articles) {
     console.log("got articles for user " + username);
     user.articles = articles;
     return user;
