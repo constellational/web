@@ -84,6 +84,6 @@ exports.handler = function(event, context) {
   var username = splitKey[0];
   var id = splitKey[1];
   fetchData(username, id).then(generateHTML).then(function(html) {
-    return storeStaticFile(username, html);
+    return storeStaticFile(username + '/' + id, html);
   }).then(context.succeed).catch(context.fail);
 };

@@ -1,7 +1,7 @@
 {
-  "name": "constellational-web",
+  "name": "constellational-static-post",
   "version": "1.0.0",
-  "description": "Isomorphic app that runs on AWS Lambda",
+  "description": "Stores a static page for the new post (listens to S3 via SNS)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
