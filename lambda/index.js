@@ -79,8 +79,6 @@ exports.handler = function(event, context) {
 
   var key = snsMsgObject.Records[0].s3.object.key;
   console.log("The key is: "+key);
-  var key = event.Records[0].s3.object.key;
-  console.log("The key is: "+key);
   var splitKey = key.split('/');
   if (splitKey.length < 2) context.fail("Not an entry");
   var username = splitKey[0];
