@@ -1,5 +1,6 @@
 var apiURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
+var STATIC_BUCKET_NAME = 'constellational-static';
 
 require("babel/register");
 var views = require('./views');
@@ -56,7 +57,25 @@ function generateHTML(data) {
   return "<html><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><meta name='viewport' content='width=device-width, initial-scale=1' /><link rel='stylesheet' type='text/css' href='" + cssSrc + "'><body><div id='react-mount'>" + reactString + "</div></body><script src='" + scriptSrc + "'></script></html>";
 }
 
+function storeStaticFile(key, html) {
+  return s3.putObjectAsync({
+    Bucket: STATIC_BUCKET_NAME,
+    Key: key,
+    Body: html,
+    ContentType: 'text/html',
+    ACL: 'public-read'
+  });
+}
+
 exports.handler = function(event, context) {
   console.log(event);
-  fetchData(event.username, event.id).then(generateHTML).then(context.succeed).catch(context.fail);
+  var key = event.Records[0].s3.object.key;
+  console.log("The key is: "+key);
+  var splitKey = key.split('/');
+  if (splitKey.length < 2) context.fail("Not an entry");
+  var username = splitKey[0];
+  var id = splitKey[1];
+  fetchData(username, id).then(generateHTML).then(function(html) {
+    return storeStaticFile(username, html);
+  }).then(context.succeed).catch(context.fail);
 };
