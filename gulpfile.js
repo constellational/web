@@ -11,6 +11,5 @@ gulp.task('default', function() {
        debug: true,
        transform: [ 'reactify' ]
      }))
-     .pipe(uglify())
      .pipe(gulp.dest('./public/'));
 });
