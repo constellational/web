@@ -1,6 +1,5 @@
-var apiURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
-var staticURL = 'https://d1gxzanke6jb5q.cloudfront.net';
-var STATIC_BUCKET_NAME = 'constellational-static';
+var STORE_BUCKET = 'constellational-store';
+var STATIC_BUCKET = 'constellational-static';
 var JS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/main.js';
 var CSS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/style.css';
 
@@ -21,47 +20,35 @@ function getObj(bucket, key) {
   });
 }
 
-function fetchData(username, id) {
-  console.log("Going to fetch data");
-  var bucket = 'constellational-store';
-  var user = {};
-  console.log("Going to fetch article ids");
-  var prefix = username + '/';
-  return s3.listObjectsAsync({Bucket: bucket, Prefix: prefix}).then(function(data) {
-    user.articles = data.Contents.map(function (obj) {
-      return obj.Key.substring(prefix.length);
-    });
-    user.articles.reverse();
-    var i = -1;
-    if (id) i = user.articles.indexOf(id);
-    if (i >= 0) {
-      console.log("Placing " + id + " first in the article list");
-      user.articles.splice(i, 1);
-      user.articles.unshift(id);
-    }
-    console.log("Going to fetch articles");
-    var promiseArr = user.articles.map(function(id) {
-      return getObj(bucket, username + '/' + id);
-    });
-    return Promise.all(promiseArr);
-  }).then(function(articles) {
-    console.log("got articles for user " + username);
-    user.articles = articles;
-    return user;
+function listPosts(username) {
+  console.log("Going to list posts");
+  var params = {Bucket: STORE_BUCKET, Prefix: usernam + '/'};
+  return s3.listObjectsAsync(params).then(function(data) {
+    data.Contents.reverse();
+    return data.Contents;
   });
 }
 
-function generateHTML(data) {
+function fetchPosts(username, postList) {
+  console.log("Going to fetch posts");
+  var promiseArr = postList.map(function(post) {
+    return getObj(bucket, username + '/' + post.Key);
+  });
+  return Promise.all(promiseArr);
+}
+
+function generateHTML(posts) {
   console.log("generating html");
+  var data = {posts: posts};
   var head = "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'><meta name='viewport' content='width=device-width, initial-scale=1' /><link rel='stylesheet' type='text/css' href='" + CSS_URL + "'>";
-  var reactString = React.renderToString(React.createElement(views.Articles, data));
+  var reactString = React.renderToString(React.createElement(views.User, data));
   var body = "<body><div id='react-mount'>" + reactString + "</div></body><script src='" + JS_URL + "'></script></html>";
   return "<html>" + head + body + "</html>";
 }
 
 function storeStaticFile(key, html) {
   return s3.putObjectAsync({
-    Bucket: STATIC_BUCKET_NAME,
+    Bucket: STATIC_BUCKET,
     Key: key,
     Body: html,
     ContentType: 'text/html',
@@ -82,9 +69,12 @@ exports.handler = function(event, context) {
   var key = snsMsgObject.Records[0].s3.object.key;
   console.log("The key is: "+key);
   var splitKey = key.split('/');
-  if (splitKey.length < 2) context.fail("Not an entry");
+  if (splitKey.length < 2) context.fail("Not a post");
   var username = splitKey[0];
-  fetchData(username).then(generateHTML).then(function(html) {
+
+  listPosts(username).then(function(postList) {
+    return fetchPosts(username, postList);
+  }).then(generateHTML).then(function(html) {
     return storeStaticFile(username, html);
   }).then(context.succeed).catch(context.fail);
 };
