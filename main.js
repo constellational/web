@@ -1,7 +1,6 @@
-var API_URL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
+var USER_URL = 'https://s3.amazonaws.com/constellational-store';
+var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
 require("babel/register");
-var API = require('./api');
-var api = new API(API_URL);
 var views = require('./lambda/views');
 var React = require('react');
 
@@ -9,10 +8,25 @@ var splitPathname = window.location.pathname.split('/');
 let username = splitPathname.shift();
 let articleID = splitPathname.shift(); 
 
+function fetchUser(username) {
+  return fetch(USER_URL + '/' + username).then(res => res.json());
+}
+
+function fetchPost(username, url) {
+  return fetch(POST_URL + '/' + username + url).then(res => res.json());
+}
+
 function load(username, id) {
-  return api(username, id).then((data) => {
-    let mountNode = document.getElementById("react-mount");
-    React.render(React.createElement(views.Articles, data), mountNode);
+  return fetchUser(username).then(function(user) {
+    if ((id) && (user.posts.indexOf(id) > 0)) {
+      user.posts.splice(user.posts.indexOf(id), 1);
+      user.posts.unshift(id);
+    }
+    var promiseArr = user.posts.map(id => fetchPost(username, id));
+    Promise.All(promiseArr).then((data) => {
+      let mountNode = document.getElementById("react-mount");
+      React.render(React.createElement(views.User, data), mountNode);
+    });
   });
 }
 
