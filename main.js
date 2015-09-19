@@ -1,6 +1,5 @@
 var USER_URL = 'https://s3.amazonaws.com/constellational-store';
 var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
-require("babel/register");
 var views = require('./static-user/views');
 var React = require('react');
 
