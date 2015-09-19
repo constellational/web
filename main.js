@@ -6,7 +6,7 @@ var React = require('react');
 
 var splitPathname = window.location.pathname.split('/');
 let username = splitPathname.shift();
-let articleID = splitPathname.shift(); 
+let id = splitPathname.shift(); 
 
 function fetchUser(username) {
   return fetch(USER_URL + '/' + username).then(res => res.json());
@@ -30,4 +30,4 @@ function load(username, id) {
   });
 }
 
-load(username, articleID);
+load(username, id);
