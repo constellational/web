@@ -11,10 +11,12 @@ module.exports = {
     filename: 'main.js',
   },
   module: {
-    loaders: [{loader: 'babel'}],
-    postloaders: [{loader: 'uglify'}]
+    loaders: [{loader: 'uglify'}, {loader: 'babel'}]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+    }),
     new S3Plugin({
       include: /.*\.(css|js)/,
       s3Options: {
