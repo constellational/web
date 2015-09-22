@@ -4,6 +4,7 @@ var views = require('./static-user/views');
 var React = require('react');
 
 var splitPathname = window.location.pathname.split('/');
+splitPathname.shift();
 let username = splitPathname.shift();
 let id = splitPathname.shift(); 
 
@@ -12,7 +13,7 @@ function fetchUser(username) {
 }
 
 function fetchPost(username, url) {
-  return fetch(POST_URL + '/' + username + url).then(res => res.json());
+  return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json());
 }
 
 function load(username, id) {
