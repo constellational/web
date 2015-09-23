@@ -9,7 +9,7 @@ let username = splitPathname.shift();
 let id = splitPathname.shift(); 
 
 function fetchUser(username) {
-  return fetch(USER_URL + '/' + username).then(res => res.json()).catch(() => {posts:[]});
+  return fetch(USER_URL + '/' + username).then(res => res.json());
 }
 
 function fetchPost(username, url) {
