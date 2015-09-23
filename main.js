@@ -23,7 +23,7 @@ function load(username, id) {
       user.posts.unshift(id);
     }
     var promiseArr = user.posts.map(id => fetchPost(username, id));
-    Promise.All(promiseArr).then((data) => {
+    Promise.all(promiseArr).then((data) => {
       let mountNode = document.getElementById("react-mount");
       React.render(React.createElement(views.User, data), mountNode);
     });
