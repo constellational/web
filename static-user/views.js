@@ -5,8 +5,8 @@ var Post = React.createClass({
   render: function() {
     var post = this.props.data;
     return <div className="post">
-      <h2><a href={'/' + this.props.username + '/' + post.id}>{post.heading}</a></h2>
-      <div>{post.data}</div>;
+      <h2><a href={'/' + this.props.username + '/' + post.id}>{post.title}</a></h2>
+      <div>{post.data}</div>
       <div className="time">{moment(post.updated).fromNow()}</div>
     </div>
   }
