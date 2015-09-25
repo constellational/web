@@ -1,5 +1,5 @@
 {
-  "name": "constellational-web",
+  "name": "constellational-static-user",
   "version": "1.0.0",
   "description": "Isomorphic app that runs on AWS Lambda",
   "main": "index.js",
