@@ -7,7 +7,7 @@ var Post = React.createClass({
     return <div className="post">
       <h2><a href={'/' + this.props.username + '/' + post.id}>{post.title}</a></h2>
       <div>{post.data}</div>
-      <div className="time">{moment(post.updated).fromNow()}</div>
+      <div className="time">{moment(post.updated).format('LLLL')}</div>
     </div>
   }
 });
