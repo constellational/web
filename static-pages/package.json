@@ -1,7 +1,7 @@
 {
-  "name": "constellational-static-post",
+  "name": "constellational-static-pages",
   "version": "1.0.0",
-  "description": "Stores a static page for the new post (listens to S3 via SNS)",
+  "description": "Stores a static pages (listens to S3)",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

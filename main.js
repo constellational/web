@@ -1,6 +1,6 @@
 var USER_URL = 'https://s3.amazonaws.com/constellational-store';
 var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
-var views = require('./static-user/views');
+var views = require('./static-pages/views');
 var React = require('react');
 
 var splitPathname = window.location.pathname.split('/');
