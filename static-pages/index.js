@@ -34,7 +34,7 @@ function listPosts(username) {
 function fetchPosts(username, postList) {
   console.log("Going to fetch posts");
   var promiseArr = postList.map(function(post) {
-    return getObj(STORE_BUCKET, username + '/' + post.Key);
+    return getObj(STORE_BUCKET, post.Key);
   });
   return Promise.all(promiseArr);
 }
