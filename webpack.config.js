@@ -11,7 +11,10 @@ module.exports = {
     filename: 'main.js',
   },
   module: {
-    loaders: [{loader: 'uglify'}, {loader: 'babel'}]
+    loaders: [{loader: 'uglify'}, {
+      exclude: /node_modules/,
+      loader: 'babel'
+    }]
   },
   plugins: [
     new webpack.ProvidePlugin({
