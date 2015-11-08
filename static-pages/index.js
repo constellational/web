@@ -1,7 +1,6 @@
 var STORE_BUCKET = 'constellational-store';
 var STATIC_BUCKET = 'constellational-static';
-// var JS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/main.js';
-var JS_URL = 'https://s3.amazonaws.com/constellational-web/main.js';
+var JS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/main.js';
 
 var CSS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/style.css';
 
