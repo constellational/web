@@ -76,8 +76,8 @@ exports.handler = function(event, context) {
 
   listPosts(username).then(function(postList) {
     if (key) {
-      var postKeys = postList.map(function(versionedKey) {
-        return versionedKey.substring(32);
+      var postKeys = postList.map(function(post) {
+        return post.Key;
       });
       var index = postKeys.indexOf(key);
       var versionedKey = postList[index];
