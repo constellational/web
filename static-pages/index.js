@@ -91,9 +91,9 @@ exports.handler = function(event, context) {
   }).then(generateHTML).then(function(html) {
     return storeStaticFile(username, html).then(function() {
       if (key) {
-        // key looks like 2015-11-02T12:09:27.200Z3mNMslb-
-        // 24char timestamp + id
-        var id = key.substring(24);
+        // key looks like 2015-11-09T16%3A38%3A41.225Z2gLGKL1y
+        // 28 char timestamp + id
+        var id = key.substring(28);
         return storeStaticFile(username + '/' + id, html);
       }
     });
