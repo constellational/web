@@ -68,14 +68,11 @@ exports.handler = function(event, context) {
   var snsMsgObject = JSON.parse(y);
   console.log("Got sns message object");
 
-  var key = snsMsgObject.Records[0].s3.object.key;
-  console.log("The key is: "+key);
-  var splitKey = key.split('/');
+  var fullKey = snsMsgObject.Records[0].s3.object.key;
+  console.log("The key is: " + fullKey);
+  var splitKey = fullKey.split('/');
   var username = splitKey.shift();
   var key = splitKey.shift();
-  // key looks like 2015-11-02T12:09:27.200Z3mNMslb-
-  // 24char timestamp + id
-  var id = key.substring(24);
 
   listPosts(username).then(function(postList) {
     if (key) {
@@ -93,7 +90,12 @@ exports.handler = function(event, context) {
     return fetchPosts(username, postList);
   }).then(generateHTML).then(function(html) {
     return storeStaticFile(username, html).then(function() {
-      if (id) return storeStaticFile(username + '/' + id, html);
+      if (key) {
+        // key looks like 2015-11-02T12:09:27.200Z3mNMslb-
+        // 24char timestamp + id
+        var id = key.substring(24);
+        return storeStaticFile(username + '/' + id, html);
+      }
     });
   }).then(context.succeed).catch(context.fail);
 };
