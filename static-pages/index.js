@@ -72,13 +72,23 @@ exports.handler = function(event, context) {
   console.log("The key is: "+key);
   var splitKey = key.split('/');
   var username = splitKey.shift();
-  var id = splitKey.shift(); 
+  var key = splitKey.shift();
+  // key looks like 2015-11-02T12:09:27.200Z3mNMslb-
+  // 24char timestamp + id
+  var id = key.substring(24);
 
   listPosts(username).then(function(postList) {
-    if (id && (postList.indexOf(id) > 0)) {
-      console.log("Placing " + id + " first in the list");
-      postList.splice(postList.indexOf(id), 1);
-      postList.unshift(id);
+    if (key) {
+      var postKeys = postList.map(function(versionedKey) {
+        return versionedKey.substring(32);
+      });
+      var index = postKeys.indexOf(key);
+      var versionedKey = postList[index];
+      if (index > 0) {
+        console.log("Placing " + id + " first in the list");
+        postList.splice(index, 1);
+        postList.unshift(versionedKey);
+      }
     }
     return fetchPosts(username, postList);
   }).then(generateHTML).then(function(html) {
