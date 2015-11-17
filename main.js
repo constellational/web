@@ -1,7 +1,7 @@
 require("babel-polyfill");
 var USER_URL = 'https://s3.amazonaws.com/constellational-store';
 var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
-var views = require('./static-pages/views');
+var views = require('./views');
 var React = require('react');
 
 var splitPathname = window.location.pathname.split('/');
@@ -18,7 +18,7 @@ function fetchPost(username, url) {
 }
 
 function load(username, id) {
-  return fetchUser(username).then(function(user) {
+  return fetchUser(username).then((user) => {
     if ((id) && (user.posts.indexOf(id) > 0)) {
       user.posts.splice(user.posts.indexOf(id), 1);
       user.posts.unshift(id);
