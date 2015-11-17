@@ -3,7 +3,7 @@ var CSS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/style.css';
 var USER_URL = 'https://s3.amazonaws.com/constellational-store';
 var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
 
-require("babel/register");
+require("babel-core/register");
 var serve = require('koa-static');
 var koa = require('koa');
 var fetch = require('node-fetch');
