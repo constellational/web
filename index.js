@@ -33,6 +33,8 @@ function fetchPost(username, url) {
   return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json());
 }
 
+app.use(serve('public'));
+
 app.use(function *() {
   var splitURL = this.url.split('/');
   splitURL.shift();
@@ -52,6 +54,4 @@ app.use(function *() {
   this.body = generateHTML(user);
 });
   
-app.use(serve('public'));
-
 app.listen(port);
