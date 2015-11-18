@@ -36,7 +36,7 @@ function fetchPost(username, url) {
 app.use(function *() {
   var splitURL = this.url.split('/');
   splitURL.shift();
-  var username = splitURL.shift();
+  var username = splitURL.shift().toLowerCase();
   var id = splitURL.shift();
   var user = yield fetchUser(username).then((user) => {
     if ((id) && (user.posts.indexOf(id) > 0)) {

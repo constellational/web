@@ -6,7 +6,7 @@ var React = require('react');
 
 var splitPathname = window.location.pathname.split('/');
 splitPathname.shift();
-let username = splitPathname.shift();
+let username = splitPathname.shift().toLowerCase();
 let id = splitPathname.shift();
 
 function fetchUser(username) {
