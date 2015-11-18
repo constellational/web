@@ -1,5 +1,5 @@
-var JS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/main.js';
-var CSS_URL = 'https://d1gxzanke6jb5q.cloudfront.net/style.css';
+var JS_URL = '/main.js';
+var CSS_URL = '/style.css';
 var USER_URL = 'https://s3.amazonaws.com/constellational-store';
 var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
 
