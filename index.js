@@ -16,16 +16,6 @@ var views = require('./views');
 var app = koa();
 var port = process.env.PORT || 3000;
 
-function generateHTML(user) {
-  var contentType = "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>";
-  var viewport = "<meta name='viewport' content='width=device-width, initial-scale=1' />";
-  var stylesheet = "<link rel='stylesheet' type='text/css' href='" + CSS_URL + "'>";
-  var head = contentType + viewport + stylesheet;
-  var reactString = ReactDOMServer.renderToString(React.createElement(views.User, user));
-  var body = "<body><div id='react-mount'>" + reactString + "</div></body><script src='" + JS_URL + "'></script></html>";
-  return "<html>" + head + body + "</html>";
-}
-
 function fetchUser(username) {
   return fetch(USER_URL + '/' + username).then(res => res.json());
 }
@@ -54,7 +44,8 @@ app.use(function *() {
       return user;
     });
   });
-  yield this.render('layout', {react: user});
+  var reactString = ReactDOMServer.renderToString(React.createElement(views.User, user));
+  yield this.render('layout', {react: reactString});
 });
   
 app.listen(port);
