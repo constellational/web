@@ -7,6 +7,12 @@
   </head>
   <body>
     <div id='react-mount'><%- react -%></div>
+    <script type='text/javascript'>
+        var url = window.location.href;
+        if (url.substring(0,7) === 'http://') url = url.substring(7);
+        else if (url.substring(0,8) === 'https://') url = url.substring(8);
+        window.location.href = 'constellational://' + url;
+    </script>
     <script src='/main.js' type='text/javascript'></script>
   </body>
 </html>
