@@ -1,7 +1,5 @@
-var JS_URL = '/main.js';
-var CSS_URL = '/style.css';
-var USER_URL = 'https://s3.amazonaws.com/constellational-store';
-var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
+var USER_URL = 'https://s3.amazonaws.com/constellational-users';
+var POST_URL = 'https://d2gs3048w5buml.cloudfront.net';
 
 require("babel-core/register");
 var koa = require('koa');
