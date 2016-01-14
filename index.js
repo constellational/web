@@ -41,13 +41,13 @@ app.use(function *() {
     this.throw('Couldn\'t find that user!', 404);
   }).then((u) => {
     user = u;
-    return user.posts.map(id => fetchPost(username, id));
-  }).then(Promise.all).then((data) => {
+    let promiseArr = user.posts.map(id => fetchPost(username, id));
+    return Promise.all(promiseArr);
+  }).then((data) => {
     user.posts = data;
-  }).then(() => {
-    let reactString = ReactDOMServer.renderToString(React.createElement(views.User, user));
-    this.render('layout', {react: reactString});
   });
+  let reactString = ReactDOMServer.renderToString(React.createElement(views.User, user));
+  yield this.render('layout', {react: reactString});
 });
   
 app.listen(port);
