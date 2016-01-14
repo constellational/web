@@ -11,7 +11,7 @@ var fetch = require('node-fetch');
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
 
-var views = require('./views');
+var User = require('./views');
 
 var app = koa();
 var port = process.env.PORT || 3000;
@@ -46,7 +46,7 @@ app.use(function *() {
   }).then((data) => {
     user.posts = data;
   });
-  let reactString = ReactDOMServer.renderToString(React.createElement(views.User, user));
+  let reactString = ReactDOMServer.renderToString(React.createElement(User, user));
   yield this.render('layout', {react: reactString});
 });
   
